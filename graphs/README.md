@@ -1,0 +1,1 @@
+This folder contains a Graph class (graph.py) that is an object that allows the user to create pre-formatted graphs (light or dark) of different plot types. graph-layouts.ipynb contains example data and graphs.
