@@ -1,11 +1,10 @@
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import axes
 
 
 class Graph:
-
-
 
     darkDict = {    'titlecolor':'white',
 
@@ -95,13 +94,15 @@ class Graph:
     # Helper to format the graph 
     # **Universal to all graph types
     @staticmethod
-    def formatGraph(s,a=axes,f=plt.Figure,d=dict):
+    def formatGraph(s,a=axes,f=plt.Figure,d=dict, h=bool):
             f.set(facecolor=d.get('axes.facecolor'))
             a.set_facecolor(d.get('axis.facecolor'))
 
             # Formatting the grid
             a.axes.grid(which='major', color=d.get('axis.bordercolor'))
-            a.minorticks_on() # Toggle minorticks, minorticks_off() is the reverse
+            if h:
+                a.minorticks_off()
+            else: a.minorticks_on() # Toggle minorticks, minorticks_off() is the reverse
 
             # Format the axis ticks - specify which={'major', 'minor', 'both'} if needed
             Graph.formatTicks(a,'x',d)
@@ -120,8 +121,9 @@ class Graph:
             plt.title(f'{s.xvar} vs. {s.yvar}', horizontalalignment='center', color=d.get('titlecolor'), fontsize=16, fontfamily=d.get('fontfamily'))
 
             # Setting & formatting the labels
-            plt.xlabel(s.xvar, color=d.get('axis.labelcolor'), fontfamily=d.get('fontfamily'))
-            plt.ylabel(s.yvar, color=d.get('axis.labelcolor'), fontfamily=d.get('fontfamily'))
+            plt.xlabel(s.xvar, color=d.get('axis.labelcolor'), fontfamily=d.get('fontfamily'), labelpad=15)
+            plt.ylabel(s.yvar, color=d.get('axis.labelcolor'), fontfamily=d.get('fontfamily'), labelpad=15)
+
 
 
 
@@ -154,7 +156,7 @@ class Graph:
     # Method to create a bar graph of self
     #       theme=str() one of ['dark', 'light']
     #       align=str() one of ['left', 'right', 'mid']
-    def plotBar(self, theme=str):
+    def plotBar(self, theme=str, horiz=False, customTitle=''):
 
             # Check the theme and get the according dictionary
             dict=Graph.checkTheme(theme)
@@ -163,9 +165,16 @@ class Graph:
             fig, ax = plt.subplots()
 
             # Plot x vs y as hist
-            ax.bar(x=self.x, height=self.y,color=dict.get('markerfacecolor'))
+            if horiz: 
+                ax.barh(y=self.x, width=self.y, color=dict.get('markerfacecolor'))
+            else: 
+                ax.bar(x=self.x, height=self.y,color=dict.get('markerfacecolor'))
+                ax.tick_params(axis='x', labelrotation=45)
 
             # Format the graph using outside helper
-            Graph.formatGraph(self,ax,fig,dict)
-            ax.tick_params(axis='x', which='minor', color=dict.get('axes.facecolor'))
-            ax.tick_params(axis='x', labelrotation=45)
+            Graph.formatGraph(self,ax,fig,dict,horiz)
+
+            if not horiz:
+                ax.tick_params(axis='x', which='minor', color=dict.get('axes.facecolor'))
+            if customTitle:
+                plt.title(f'{customTitle}', horizontalalignment='center', color=dict.get('titlecolor'), fontsize=16, fontfamily=dict.get('fontfamily'))
