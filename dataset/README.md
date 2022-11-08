@@ -1,0 +1,1 @@
+The class 'Dataset' provides a class to contain functions relating to comparing two lists. I created a class instead of just a standalone method (that could be imported) so that I can possibly add more functions in the future.  
