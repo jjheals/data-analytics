@@ -2,79 +2,22 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import axes
+from themes import *
 
 
 class Graph:
-
-    darkDict = {    'titlecolor':'white',
-
-                    'xtick.color':'white', 
-                    'xtick.labelcolor':'white',
-                    'xtick.labelsize':8,
-
-                    'ytick.color':'white', 
-                    'ytick.labelcolor':'white',
-                    'ytick.labelsize':8,
-
-                    'axes.facecolor':'black',
-                    'axis.facecolor':'black',
-                    'axis.bordercolor':'#575757',
-                    'axis.labelcolor':'#909191',
-                    'axis.spinecolor':'#575757',
-
-                    'trendline.color':'#c7005a',
-                    'markerfacecolor':'#850000',
-
-                    'fontsize':12, 
-                    'horizontalalignment':'center',
-                    'fontfamily':'serif'
-                    }
-    lightDict = {   'titlecolor':'black',
-
-                    'xtick.color':'black', 
-                    'xtick.labelcolor':'#0a0a0a',
-                    'xtick.labelsize':8,
-
-                    'ytick.color':'black', 
-                    'ytick.labelcolor':'#0a0a0a',
-                    'ytick.labelsize':8,
-
-                    'axes.facecolor':'white',
-                    'axis.facecolor':'white',
-                    'axis.bordercolor':'#a6a6a6',
-                    'axis.labelcolor':'#0a0a0a',
-                    'axis.spinecolor':'#0a0a0a',
-
-                    'trendline.color':'#8400ff',
-                    'markerfacecolor':'#ca99ff',
-
-                    'fontsize':12, 
-                    'horizontalalignment':'center',
-                    'fontfamily':'serif'
-                    }
-
-    def __init__(self, x=list, y=list, xvar=str, yvar=str):
+    
+    def __init__(self, x:list, y:list, xvar:str, yvar:str):
             self.x = x
             self.y = y
             self.xvar = xvar
             self.yvar = yvar
-    
-    # ----- =+= -----#
-    # Helper to check the theme
-    # **Called by all plot*() methods
-    @staticmethod
-    def checkTheme(t=str):
-            if t == 'light':
-                    dict=Graph.lightDict
-            elif t == 'dark':
-                    dict=Graph.darkDict
-            return dict
 
     # ----- =+= -----#
     # Helper to format the ticks 
     # **Called by formatGraph()
     @staticmethod
-    def formatTicks(a=axes, axisToSet=str, dict=dict):
+    def formatTicks(a:axes, axisToSet:str, dict:dict):
             if axisToSet == 'x':
                     colorKey = 'xtick.color'
                     labelcolorKey = 'xtick.labelcolor'
@@ -94,7 +37,7 @@ class Graph:
     # Helper to format the graph 
     # **Universal to all graph types
     @staticmethod
-    def formatGraph(s,a=axes,f=plt.Figure,d=dict, h=bool):
+    def formatGraph(s, a:axes, f:plt.Figure, d:dict, h=False):
             f.set(facecolor=d.get('axes.facecolor'))
             a.set_facecolor(d.get('axis.facecolor'))
 
@@ -124,17 +67,14 @@ class Graph:
             plt.xlabel(s.xvar, color=d.get('axis.labelcolor'), fontfamily=d.get('fontfamily'), labelpad=15)
             plt.ylabel(s.yvar, color=d.get('axis.labelcolor'), fontfamily=d.get('fontfamily'), labelpad=15)
 
-
-
-
     # ----- =+= -----#
     # Method to create a scatter plot of self 
     #       theme=str() one of ['dark', 'light']
     #       marker=str() a valid marker type for scatter plots
-    def plotScatter(self, theme=str, marker='o',trendline=True):
+    def plotScatter(self, theme:str, marker='o', trendline=True):
 
             # Check the theme and get the according dictionary 
-            dict=Graph.checkTheme(theme)
+            dict=checkTheme(theme)
 
             # Create the figure & axes
             fig, ax = plt.subplots()
@@ -151,15 +91,14 @@ class Graph:
                     p = np.poly1d(z)
                     ax.plot(self.x,p(self.x), color=dict.get('trendline.color'))
 
-
     # ----- =+= -----#
     # Method to create a bar graph of self
     #       theme=str() one of ['dark', 'light']
     #       align=str() one of ['left', 'right', 'mid']
-    def plotBar(self, theme=str, horiz=False, customTitle=''):
+    def plotBar(self, theme:str, horiz=False, customTitle=''):
 
             # Check the theme and get the according dictionary
-            dict=Graph.checkTheme(theme)
+            dict=checkTheme(theme)
 
             # Create the figure & axes
             fig, ax = plt.subplots()
